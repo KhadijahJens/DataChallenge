@@ -1,0 +1,24 @@
+-- First I counted the number of brands in each plan level to get an idea of the distribution of plans
+SELECT planLevel, COUNT(*) as num_brands
+FROM sample.brand
+GROUP BY planLevel;
+
+-- Calculated average BANT score for each plan level
+SELECT planLevel, AVG(bantScore) as avg_bantScore
+FROM `sample.brand`
+GROUP BY planLevel;
+
+-- Calculate the average company size for each plan level
+SELECT planLevel, COUNT (companySize) as num_company
+FROM `sample.brand`
+GROUP BY planLevel;
+
+-- Counted the number of brands signed up per month to look at potentiable seasonal reasons
+-- There are more signups during the summer months of May-August
+SELECT EXTRACT(MONTH FROM created) AS signup_month, COUNT(*) AS num_signups
+FROM `sample.brand`
+GROUP BY signup_month
+ORDER BY signup_month;
+
+--It seems that companies with less than 10 employees are more like to subscribe vs large companies
+--Companies located in the US are also more likely to subscribe
