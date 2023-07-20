@@ -1,0 +1,39 @@
+-- Joined the 2 tables to better visualize the data
+SELECT * FROM `sample.campaigns` sc
+JOIN `sample.users` su ON su.user_id = sc.user_id;
+
+--ratio of brands that published campaigns vs. did not publish any campaign within each plan level
+SELECT 
+  SUM(CASE WHEN isUnpublished = true THEN 1 ELSE 0 END) / SUM(CASE WHEN isUnpublished = false THEN 1 ELSE 0 END) as ratio, planLevel
+  FROM `sample.campaigns` sc
+JOIN `sample.users` su ON su.user_id = sc.user_id
+   GROUP BY planLevel;
+
+--How many brands continued to create campaigns after their first published one?
+SELECT COUNT(campaigns.user_id) as multiple_campaigns
+FROM (
+    SELECT sc.user_id
+    FROM `sample.campaigns` sc
+    JOIN `sample.users` su ON su.user_id = sc.user_id
+    GROUP BY sc.user_id
+    HAVING COUNT(DISTINCT sc.campaign_id) > 1
+) AS campaigns;
+
+-- Tried to figure which brands that have the highest paying campaigns but got stuck
+SELECT sc.user_id, payment
+    FROM `sample.campaigns` sc
+    JOIN `sample.users` su ON su.user_id = sc.user_id
+   WHERE payment LIKE;
+
+--How long does it take for new brands to publish a campaign? 
+SELECT (DATE(published) - DATE(su.created)) as time_day
+    FROM `sample.campaigns` sc
+    JOIN `sample.users` su ON su.user_id = sc.user_id
+    WHERE DATE(published) > '2021-01-01'
+    ORDER BY time_day;
+
+--Finding the average amount of days taken to publish
+SELECT AVG(DATE_DIFF(published, su.created, DAY)) AS time_diff
+FROM `sample.campaigns` sc
+JOIN `sample.users` su ON su.user_id = sc.user_id
+WHERE DATE(published) > '2021-01-01';
