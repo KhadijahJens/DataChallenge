@@ -1,0 +1,24 @@
+--What trends do you see for plan level 0, plan level 3 and plan level 9
+--Started by finding unique athletes, paths and total records searched in each plan level
+SELECT planLevel,
+       COUNT(*) AS total_records,
+       COUNT(DISTINCT path) AS unique_paths,
+       COUNT(DISTINCT athlete_name_y) AS unique_athletes
+FROM `sample.AST`
+WHERE planLevel IN (0, 3, 9) AND path IS NOT NULL AND athlete_name_y IS NOT NULL
+GROUP BY planLevel
+ORDER BY planLevel;
+
+--What differences would you highlight between the trends in search for plan levels?
+--Found average MaxPrice and MinPrice based on planLevel
+--PlanLevel 0 has a higher price on average than planLevel 3
+--PlanLevel 9 is not included in the results as there is not enough data on it
+SELECT 
+  planLevel,
+  COUNT(*) AS total_records,
+  AVG(MaxPrice) AS average_max_price,
+  AVG(MinPrice) AS average_min_price,
+  MAX(MaxPrice) AS max_max_price,
+  MIN(MinPrice) AS min_min_price
+FROM `sample.AST`
+GROUP BY planLevel;
