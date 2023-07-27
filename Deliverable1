@@ -20,5 +20,5 @@ FROM `sample.brand`
 GROUP BY signup_month
 ORDER BY signup_month;
 
---It seems that companies with less than 10 employees are more like to subscribe vs large companies
+--It seems that companies with 10-49 employees are more like to subscribe vs larger companies
 --Companies located in the US are also more likely to subscribe
